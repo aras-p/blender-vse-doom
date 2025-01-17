@@ -1,4 +1,7 @@
-# from https://github.com/shedskin/shedskin/blob/master/examples/doom/render.py
+# From "Minimal DOOM WAD renderer" by Mark Dufour,
+# https://github.com/shedskin/shedskin/blob/6c30bbe617/examples/doom/render.py
+# with two changes for avoiding division by zero exceptions:
+# `max(lowerDy, 0.00001)` and `max(upperDy, 0.00001)`
 
 import math
 from struct import unpack_from

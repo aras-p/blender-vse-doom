@@ -1,4 +1,14 @@
-# https://github.com/shedskin/shedskin/blob/master/examples/doom/doom.py
+# A modal blender operator that loads doom file, creates
+# VSE timeline full of color strips, listens to keyboard input for player
+# control, renders doom frame and updates the VSE color strip colors
+# to match the rendered result. Escape key finishes the operator.
+#
+# I have no idea what I'm doing, so it is entirely possible that the
+# operator is written in a completely nonsensical way!
+#
+# All the Doom-specific heavy lifting is in render.py, written by
+# Mark Dufour and is completely unrelated to Blender. It is just a tiny
+# pure Python Doom loader/renderer.
 
 import bpy
 import os
@@ -112,7 +122,6 @@ class DoomOperator(bpy.types.Operator):
         pl.update()
         
         # render frame and update strip colors
-
         t0 = time.perf_counter()
         buf = render.render(self.map, self.frame_count)
         t1 = time.perf_counter()
