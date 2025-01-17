@@ -3,14 +3,16 @@
 import bpy
 import os
 import math
+import time
 
 import render
 
 class DoomOperator(bpy.types.Operator):
-    bl_idname = "sequencer.doom_player"
+    bl_idname = "lol.doom_player"
     bl_label = "Doom Player"
         
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.timer = None
         self.strip_lookup = None
         self.map = None
@@ -79,13 +81,20 @@ class DoomOperator(bpy.types.Operator):
     def invoke(self, context, event):
         context.window.cursor_modal_set('HAND')
         
-        # create strips        
+        # create strips
+        t0 = time.perf_counter()
         self.create_strips()
+        t1 = time.perf_counter()
+        print(f"doom: created {render.WIDTH}x{render.HEIGHT} ({render.WIDTH*render.HEIGHT}) strips in {(t1-t0)*1000:.1f}ms")
         self.frame_count = 0
         
         # load doom map
         blen_dir = os.path.normpath(os.path.join(__file__, ".."))
-        self.map = render.Map(f"{blen_dir}/doom1.wad", 'E1M1')
+        mapname = 'E1M1'
+        t0 = time.perf_counter()
+        self.map = render.Map(f"{blen_dir}/doom1.wad", mapname)
+        t1 = time.perf_counter()
+        print(f"doom: loaded {mapname} in {(t1-t0)*1000:.1f}ms")
         palette = self.map.palette
         self.blender_palette = [(r/255, g/255, b/255) for r,g,b in palette]
         self.player = self.map.player
@@ -103,17 +112,13 @@ class DoomOperator(bpy.types.Operator):
         pl.update()
         
         # render frame and update strip colors
-        self.frame_count += 1
+
+        t0 = time.perf_counter()
         buf = render.render(self.map, self.frame_count)
+        t1 = time.perf_counter()
         self.update_strips(buf)
-            
+        t2 = time.perf_counter()
+        if self.frame_count % 8 == 0:
+            print(f"doom: render {(t1-t0)*1000:.1f}ms strip color update {(t2-t1)*1000:.1f}ms")
 
-def register():
-    bpy.utils.register_class(DoomOperator)
-
-def unregister():
-    bpy.utils.unregister_class(DoomOperator)
-
-def launch():
-    register()
-    bpy.ops.sequencer.doom_player('INVOKE_DEFAULT')
+        self.frame_count += 1
