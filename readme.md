@@ -1,6 +1,6 @@
 # Doom running in Blender Video Sequence Editor timeline
 
-Here's a video! <br/>
+Here's a video (click): <br/>
 [![Doom in Blender VSE timeline](https://img.youtube.com/vi/Y2iDZjteMs8/0.jpg)](https://www.youtube.com/watch?v=Y2iDZjteMs8)
 
 A modal blender operator that loads doom file, creates
@@ -39,9 +39,10 @@ The pure-python Doom renderer, while perhaps written in not performant Python wa
 It takes about 7 milliseconds to render 80x60 frame. It takes almost 300 milliseconds to update the colors
 of all the VSE strips, in comparison. I will see if I can optimize it somehow!
 
-In Blender 4.0 or earlier it runs even slower, because redrawing the VSE timeline with 5000 strips
-takes about 100 milliseconds; that is no longer slow in 4.1+ (1-2ms).
+> In Blender 4.0 or earlier it runs even slower, because redrawing the VSE timeline with 5000 strips
+> takes about 100 milliseconds; that is no longer slow in 4.1+ (1-2ms).
 
+A blog post with more details: https://aras-p.info/blog/2025/01/17/Doom-in-Blender-VSE/
 
 ## .blend file contents
 
